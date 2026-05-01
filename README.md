@@ -15,10 +15,13 @@ pip install -r requirements.txt
 ```
 
 ```
-python3 -m venv venv
-source .venv/Scripts/activate
+python3 -m venv .venv
+source .venv/Scripts/activate # OS COMMAND
+source .venv/bin/activate # CPANEL COMMAND
+
 pip install -r requirements.txt
 pip install --no-cache-dir -r requirements.txt
+pip install -r requirements.txt --default-timeout=100 --retries=20
 ```
 
 3. ▶️ Jalankan Program
