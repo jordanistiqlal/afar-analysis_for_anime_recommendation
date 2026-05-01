@@ -12,16 +12,16 @@ def scrape_data(username):
     
     # Gunakan API MAL (perlu client ID dari https://myanimelist.net/apiconfig)
     headers = {
-        'X_MAL_CLIENT_ID': os.getenv('X_MAL_CLIENT_ID')
+        'X-MAL-CLIENT-ID': os.getenv('X-MAL-CLIENT-ID')
     }
     
     # API endpoint untuk user anime list
-    url = f"{os.getenv('MAL_URL')}/v2/users/{username}/animelist"
+    url = f"{os.getenv('MAL-URL')}/v2/users/{username}/animelist"
     params = {
         'fields': 'list_status',
         'limit': 1000
     }
-    
+
     response = requests.get(url, headers=headers, params=params, timeout=15)
     if response.status_code != 200:
         return {"error": "Username not found or API error"}
