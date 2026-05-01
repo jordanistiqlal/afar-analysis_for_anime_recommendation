@@ -1,18 +1,22 @@
-import requests
-import pandas as pd
-from collections import OrderedDict
-import time
 
 def scrape_data(username):
+    import requests
+    import pandas as pd
+    from collections import OrderedDict
+    import time
+    from dotenv import load_dotenv 
+    import os
+    load_dotenv()
+
     start_time = time.time()
     
     # Gunakan API MAL (perlu client ID dari https://myanimelist.net/apiconfig)
     headers = {
-        'X-MAL-CLIENT-ID': '44b91feb99e0ba4a3fa3bb3a3db6d150'
+        'X-MAL-CLIENT-ID': os.getenv('X_MAL_CLIENT_ID')
     }
     
     # API endpoint untuk user anime list
-    url = f"https://api.myanimelist.net/v2/users/{username}/animelist"
+    url = f"{os.getenv('MAL-URL')}/v2/users/{username}/animelist"
     params = {
         'fields': 'list_status',
         'limit': 1000

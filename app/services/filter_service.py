@@ -1,8 +1,8 @@
-import pandas as pd
-import gc
-from app.services.dataset_store import get_dataset, parse_list
-
 def filter_anime(data, selected_genres, selected_studios):
+    from app.services.dataset_store import get_dataset, parse_list
+    import pandas as pd
+    import gc
+
     dataset = get_dataset()
 
     df = pd.DataFrame(data)
@@ -20,7 +20,7 @@ def filter_anime(data, selected_genres, selected_studios):
     merged_df = pd.merge(df, df_clean, on='mal_id', how='inner')
 
     if 'Unnamed: 0' in merged_df.columns:
-        merged_df.drop(columns=['Unnamed: 0'], inplace=True)
+        merged_df.drop(columns=['Unnamed: 0'], errors='ignore', inplace=True)
 
     merged_df['genre'] = merged_df['genre'].apply(parse_list)
     merged_df['studio'] = merged_df['studio'].apply(parse_list)

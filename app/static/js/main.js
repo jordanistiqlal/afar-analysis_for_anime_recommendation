@@ -92,7 +92,7 @@ const inputUsername = (ttlMs) => {
             try {
                 animelist = result.value
                 setSessionStorage('animelist', animelist, ttlMs) // simpan di session storage selama 60 menit
-    
+                
                 const analysis = await startAnalysis(animelist.data)
                 await chartManagement(animelist, analysis)
     
@@ -304,6 +304,7 @@ const animeWatched = (response) => {
 
     let watched_count = 0
     let unwatched_count = 0
+    response.data = response.data.sort((a, b) => b.score - a.score)
 
     const checkProgress = (string) => {        
         let progress = string.split('/')

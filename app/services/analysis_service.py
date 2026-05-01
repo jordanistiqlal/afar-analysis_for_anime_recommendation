@@ -1,10 +1,9 @@
-import pandas as pd
 import gc
-from app.services.dataset_store import get_dataset, parse_list
-from app.utils.features import build_feature_matrix_cached, build_feature_matrix_incremental 
-from app.services.recomendation_service import recommend_unwatched
 
 def analysis_anime(data):
+    from app.services.dataset_store import get_dataset
+    import pandas as pd
+
     df = pd.DataFrame(data)
     df.rename(columns={'id': 'mal_id'}, inplace=True)
     df.rename(columns={'score': 'my_score'}, inplace=True)
@@ -20,7 +19,7 @@ def analysis_anime(data):
     df_clean = dataset.drop(columns=cols_to_drop+['image_url'])
 
     merged_df = pd.merge(df, df_clean, on='mal_id', how='inner')
-    merged_df = merged_df.drop(['Unnamed: 0'], axis=1)
+    merged_df = merged_df.drop(columns=['Unnamed: 0'], errors='ignore')
 
     analysis_df = merged_df.copy()
 
@@ -109,6 +108,8 @@ def fetch_theme(df):
     return result
 
 def fetch_anime_time(df):
+    import pandas as pd
+
     temp_df = df[['premiered']].copy()
     temp_df['premiered'] = temp_df['premiered'].str.replace('  ', ' ', regex=False).str.strip()
     temp_df = temp_df[~temp_df['premiered'].isin(['-', '?'])]
@@ -149,6 +150,12 @@ def fetch_anime_time(df):
     return result
 
 def fetch_analysis(df):
+    import pandas as pd
+ 
+    from app.services.dataset_store import get_dataset
+    from app.utils.features import build_feature_matrix_cached
+    from app.services.recomendation_service import recommend_unwatched
+
     df = pd.DataFrame(df)
     df.rename(columns={'id': 'mal_id'}, inplace=True)
     df.rename(columns={'score': 'my_score'}, inplace=True)
@@ -164,7 +171,7 @@ def fetch_analysis(df):
     df_clean = dataset.drop(columns=cols_to_drop+['image_url'])
 
     merged_df = pd.merge(df, df_clean, on='mal_id', how='inner')
-    merged_df = merged_df.drop(['Unnamed: 0'], axis=1)
+    merged_df = merged_df.drop(columns=['Unnamed: 0'], errors='ignore')
 
     analysis_df = merged_df.copy()
 
@@ -198,10 +205,3 @@ def fetch_analysis(df):
     result = response[['mal_id', 'title', 'link', 'episode', 'mal_score' , 'premiered', 'rank', 'similarity_score', 'image_url']].to_dict(orient='records')
 
     return result
-
-def main():
-    while True:
-        analysis_anime()
-
-if __name__ == "__main__":
-    main()

@@ -1,7 +1,3 @@
-import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
-from app.utils.features import build_feature_matrix, build_user_profile
-
 def recommend_unwatched(
     dataset,
     feature_matrix,
@@ -9,6 +5,10 @@ def recommend_unwatched(
     watched_indices,
     top_n=10
 ):
+    import numpy as np
+    from sklearn.metrics.pairwise import cosine_similarity
+    from app.utils.features import build_user_profile
+
     # ---- COLD START ----
     if len(liked_indices) == 0:
         unwatched = dataset.drop(watched_indices)
